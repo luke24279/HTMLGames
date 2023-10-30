@@ -1,0 +1,34 @@
+.fiveUp {
+    background-image: url(images/fiveUp.png);
+    height: 50px;
+    width: 30px;
+    z-index: 2;
+}
+.fiveDown {
+    background-image: url(images/fiveDown.png);
+    height: 50px;
+    width: 30px;
+}
+.oneUp {
+    background-image: url(images/oneUp.png);
+    height: 50px;
+    width: 30px;
+}
+.oneDown {
+    background-image: url(images/oneDown.png);
+    height: 50px;
+    width: 30px;
+}
+body {
+    margin-left: 20px;
+    font-size: 30px;
+}
+button {
+    border-style: none;
+    width: 200px;
+    height: 100px;
+    background-color: rgb(99, 99, 99);
+    color: red;
+    font-size: 30px;
+    font-weight: bold;
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div {
+        border-style: solid;
+        border-width: 1px;
+        background-color: white;
+        width: 75px;
+        height: 75px;
+    }
+</style>
+
+<body>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="05"></div>
+        <div id="04"></div>
+        <div id="03"></div>
+        <div id="02"></div>
+        <div id="01"></div>
+        <div id="00"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="15"></div>
+        <div id="14"></div>
+        <div id="13"></div>
+        <div id="12"></div>
+        <div id="11"></div>
+        <div id="10"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="25"></div>
+        <div id="24"></div>
+        <div id="23"></div>
+        <div id="22"></div>
+        <div id="21"></div>
+        <div id="20"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="35"></div>
+        <div id="34"></div>
+        <div id="33"></div>
+        <div id="32"></div>
+        <div id="31"></div>
+        <div id="30"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="45"></div>
+        <div id="44"></div>
+        <div id="43"></div>
+        <div id="42"></div>
+        <div id="41"></div>
+        <div id="40"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="55"></div>
+        <div id="54"></div>
+        <div id="53"></div>
+        <div id="52"></div>
+        <div id="51"></div>
+        <div id="50"></div>
+    </div>
+    <div style="width: 77px; height: 462px; float: left;">
+        <div id="65"></div>
+        <div id="64"></div>
+        <div id="63"></div>
+        <div id="62"></div>
+        <div id="61"></div>
+        <div id="60"></div>
+    </div>
+    <button onclick="placeColor(1)" style="clear: left;">Place</button>
+    <button onclick="placeColor(2)">Place</button>
+    <button onclick="placeColor(3)">Place</button>
+    <button onclick="placeColor(4)">Place</button>
+    <button onclick="placeColor(5)">Place</button>
+    <button onclick="placeColor(6)">Place</button>
+    <button onclick="placeColor(7)">Place</button>
+    <button onclick="reload()">Reload</button>
+    <p id="winner"></p>
+</body>
+<script>
+    var gameArray = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]];
+    //var colors = [`rgb(${prompt("Red Value?")}, ${prompt("Green Value?")}, ${prompt("Blue Value?")})`, `rgb(${prompt("Red Value?")}, ${prompt("Green Value?")}, ${prompt("Blue Value?")})`]
+    var colors = [`rgb(${Math.round(Math.random() * 77) + 50}, ${Math.round(Math.random() * 77) + 50}, ${Math.round(Math.random() * 77) + 50})`, `rgb(${Math.round(Math.random() * 127) + 73}, ${Math.round(Math.random() * 127) + 73}, ${Math.round(Math.random() * 127) + 73})`]
+    //var colors = ["red", "yellow"]
+    var color = '';
+    var turn = 0
+    function placeColor(column) {
+        color = colors[turn % 2]
+        column--
+        for (row in gameArray[column]) {
+            if (gameArray[column][row] != 0) {
+                //console.log("Spot filled, checking one above");
+            }
+            if (gameArray[column][row] == 0) {
+                //console.log("Spot empty, filling it.");
+                gameArray[column][row] = (turn % 2) + 1
+                turn += 1
+                document.getElementById(`${column}${row}`).setAttribute("style", `background-color:${color};`)
+                break
+            }
+            if (row == 5 && gameArray[column][row] != 0) {
+                //console.log("Row full");
+                break
+            }
+        }
+        /*for (tag in blahblah) {
+            if (document.getElementById(tag).getAttribute("style", "background-color") == document.getElementById(tag).getAttribute("style", "background-color")) {
+                console.log("WINNER");
+            }
+        }*/
+
+        var divs = document.getElementsByTagName("div")
+        var x = 0
+        for (divLayer of divs) {
+            if (divLayer.style.backgroundColor) {
+                var onepiece = divLayer
+                var twopiece = document.getElementById('0' + (parseInt(onepiece.id) - 1)).getAttribute("style", "background-color")
+                var threepiece = document.getElementById('0' + (parseInt(onepiece.id) - 2)).getAttribute("style", "background-color")
+                var fourpiece = document.getElementById('0' + (parseInt(onepiece.id) - 3)).getAttribute("style", "background-color")
+                onepiece = ("background-color:" + onepiece.style.backgroundColor + ";")
+                console.log(onepiece);
+                console.log(twopiece);
+                console.log(threepiece);
+                console.log(fourpiece);
+                if (onepiece == twopiece && onepiece == threepiece && onepiece == fourpiece) {
+                    document.getElementById("winner").innerHTML = "YOU WON"
+                }
+            }
+            else continue;
+
+
+        }
+    }
+
+    /*for (let i = 0; i < 1000; i++) {
+        placeColor(Math.round(Math.random() * 7) + 1)
+    }*/
+
+</script>
+
+</html>
