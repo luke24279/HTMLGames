@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <button onclick="location.reload()">Restart</button>
+</body>
+<script>
+    var myPogCount = 20
+    gameRun = true
+    console.log("start");
+    while (gameRun) {
+        console.log(myPogCount);
+        while (myPogCount >= 1) {
+            var bettedPogs = Math.floor(parseInt(prompt("How many pogs would you like to bet, from 1 to 10?")))
+            if (bettedPogs <= 10 && bettedPogs >= 1) {
+                myPogCount -= bettedPogs
+            }
+            else if (bettedPogs === null) {
+                gameRun = false
+            }
+            
+            else {
+                alert("Please input a number between 1 and 10")
+            }
+        }
+        alert("You do not have enough pogs to bet, would you like to add more?");
+        addMore = prompt("Y for yes, N for no").toLowerCase()
+        if (addMore == "y") {
+            addMoreValue = Math.floor(parseInt(prompt("How many pogs do you want to add into your account?")))
+            myPogCount += addMoreValue
+        }
+        else if (addMore == "n") {
+            gameRun = false
+        }
+        else {
+            alert("Please enter in a valid response");
+        }
+    }
+    alert("It ended")
+    console.log("end");
+</script>
+
+</html>

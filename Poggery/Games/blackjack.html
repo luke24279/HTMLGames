@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <button id="drawCards" onclick="drawCard()">Hit</button>
+    <button onclick="stand()">Stand</button> <br>
+    <!--<button onclick="console.log(discarded);">Show Discard Pile</button><br>-->
+    <!--<button onclick="console.log(deck);">Show Deck</button> <br>-->
+    <button onclick="location.reload()">Restart</button><br>
+    <p id="scoreBox" style="font-size: 30px;"></p>
+    <p id="ending" style="font-size: 30px;"></p>
+</body>
+<script>
+    var deck = [["Ace of Spades", "2 of Spades", "3 of Spades", "4 of Spades", "5 of Spades", "6 of Spades", "7 of Spades", "8 of Spades", "9 of Spades", "10 of Spades", "Jack of Spades", "Queen of Spades", "King of Spades"], ["Ace of Hearts", "2 of Hearts", "3 of Hearts", "4 of Hearts", "5 of Hearts", "6 of Hearts", "7 of Hearts", "8 of Hearts", "9 of Hearts", "10 of Hearts", "Jack of Hearts", "Queen of Hearts", "King of Hearts"], ["Ace of Diamonds", "2 of Diamonds", "3 of Diamonds", "4 of Diamonds", "5 of Diamonds", "6 of Diamonds", "7 of Diamonds", "8 of Diamonds", "9 of Diamonds", "10 of Diamonds", "Jack of Diamonds", "Queen of Diamonds", "King of Diamonds"], ["Ace of Clubs", "2 of Clubs", "3 of Clubs", "4 of Clubs", "5 of Clubs", "6 of Clubs", "7 of Clubs", "8 of Clubs", "9 of Clubs", "10 of Clubs", "Jack of Clubs", "Queen of Clubs", "King of Clubs"]]
+    var discarded = []
+    var colors = ["rgb(138, 0, 198)", "rgb(223, 42, 42)", "rgb(82, 88, 255)", "rgb(9, 146, 0)"]
+    var picture = ["../Images/spade.png", "../Images/heart.png", "../Images/diamond.png", "../Images/club.png"]
+    var score = 0
+    var dealerScore = 0
+    var i = 1
+    function stand() {
+        document.getElementById('drawCards').disabled = true;
+        document.getElementById("ending").innerHTML = "You stood, stopping where you are at. Game over."
+    }
+    function drawCard() {
+        if (discarded.length == 52) {
+            console.log("ended");
+            return
+        }
+        var suitNumber = Math.floor(Math.random() * 4)
+        var faceNumber = Math.floor(Math.random() * 13) + 1
+        while (deck[suitNumber][faceNumber - 1] == null) {
+            suitNumber = Math.floor(Math.random() * 4)
+            faceNumber = Math.floor(Math.random() * 13) + 1
+            face = faceNumber
+        }
+        if (faceNumber >= 10) score += 10
+        else if (faceNumber == 1 && score + 11 <= 21) score += 11
+        else score += faceNumber;
+
+        faceNumber -= 1
+        discarded.push(deck[suitNumber][faceNumber])
+        var cardDiv = document.createElement("div")
+        cardDiv.className = "cardHolder";
+        cardDiv.style.width = 250 + "px"
+        cardDiv.style.height = 350 + 'px'
+        cardDiv.style.border = "solid"
+        cardDiv.style.margin = 5 + 'px'
+        cardDiv.style.display = "inline-block"
+        cardDiv.style.color = colors[suitNumber]
+        var cardPic = document.createElement("img")
+        cardPic.className = "cardPicture";
+        cardPic.src = picture[suitNumber]
+        var cardText = document.createElement("p")
+        cardText.className = "cardText";
+        cardText.style.fontSize = 50 + "px"
+        cardText.textContent = deck[suitNumber][faceNumber];
+        cardDiv.appendChild(cardPic)
+        cardDiv.appendChild(cardText)
+        document.body.appendChild(cardDiv)
+        i += 1
+        deck[suitNumber][faceNumber] = null
+        //dealer draw
+        if (dealerScore < 21) {
+            var dealersuitNumber = Math.floor(Math.random() * 4)
+            var dealerfaceNumber = Math.floor(Math.random() * 13) + 1
+            while (deck[dealersuitNumber][dealerfaceNumber - 1] == null) {
+                dealersuitNumber = Math.floor(Math.random() * 4)
+                dealerfaceNumber = Math.floor(Math.random() * 13) + 1
+                face = dealerfaceNumber
+            }
+            if (dealerfaceNumber >= 10) dealerScore += 10
+            else if (dealerfaceNumber == 1 && dealerScore + 11 <= 21) dealerScore += 11
+            else dealerScore += dealerfaceNumber;
+            dealerfaceNumber -= 1
+            console.log(dealerScore);
+            console.log(deck[dealersuitNumber][dealerfaceNumber]);
+            discarded.push(deck[dealersuitNumber][dealerfaceNumber])
+        }
+        document.getElementById("scoreBox").innerHTML = score + " vs " + dealerScore
+        if (score > 21) {
+            document.getElementById("drawCards").disabled = true;
+            document.getElementById("ending").innerHTML = "You went over 21, you lose."
+        }
+        if (dealerScore > 21) {
+            document.getElementById("drawCards").disabled = true;
+            document.getElementById("ending").innerHTML = "The dealer went over, you win."
+        }
+        if (score < 21 && dealerScore == 21) {
+            document.getElementById("ending").innerHTML = "The dealer got BlackJack, you must go for it to tie!"
+        }
+        if (score == 21 && dealerScore == 21) {
+            document.getElementById("ending").innerHTML = "You and the dealer both got BlackJack! You get your money back."
+        }
+        if (score > 21 && dealerScore > 21) {
+            document.getElementById("ending").innerHTML = "You both went over, you get your money back."
+        }
+        if (score == 21 && dealerScore != 21) {
+            document.getElementById("ending").innerHTML = "You got blackjack, you win."
+            document.getElementById("drawCards").disabled = true;
+        }
+
+    }
+</script>
+
+</html>

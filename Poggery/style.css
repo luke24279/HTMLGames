@@ -1,0 +1,29 @@
+body {
+    background-color: rgb(165, 165, 165);
+}
+button {
+    font-size: 30px;
+}
+a {
+    font-size: 50px;
+}
+div {
+    font-size: 30px;
+    background-color: rgb(255, 255, 255);
+}
+.cardText {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1;
+    text-align: center;
+    word-spacing: 9999999px;
+}
+.cardHolder {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
