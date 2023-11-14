@@ -13,21 +13,21 @@
     <div id="answer" style="background-color: rgb(0, 0, 0); width: 200px; height: 200px;"></div>
     <button onclick="check()">Submit</button>
     <div id="rgb"></div>
-    <button class="fiveUp" onclick="RedPlus()" style="float: left; margin-right: 50px;"></button>
-    <button class="fiveUp" onclick="GreenPlus()" style="float: left; margin-right: 50px;"></button>
-    <button class="fiveUp" onclick="BluePlus()"></button> <br>
-    <button class="oneUp" onclick="OneRedPlus()" style="float: left; margin-right: 50px;"></button>
-    <button class="oneUp" onclick="OneGreenPlus()" style="float: left; margin-right: 50px;"></button>
-    <button class="oneUp" onclick="OneBluePlus()"></button> <br><br>
+    <button class="fiveUp" onclick="increase(5, 'red')" style="float: left; margin-right: 50px;"></button>
+    <button class="fiveUp" onclick="increase(5, 'green')" style="float: left; margin-right: 50px;"></button>
+    <button class="fiveUp" onclick="increase(5, 'blue')"></button> <br>
+    <button class="oneUp" onclick="increase(1, 'red')" style="float: left; margin-right: 50px;"></button>
+    <button class="oneUp" onclick="increase(1, 'green')" style="float: left; margin-right: 50px;"></button>
+    <button class="oneUp" onclick="increase(1, 'blue')"></button> <br><br>
     <div id="red" style="float: left; margin-right: 50px;"></div>
     <div id="green" style="float: left; margin-right: 50px;"></div>
     <div id="blue"></div> <br>
-    <button class="oneDown" onclick="OneRedMinus()" style="float: left; margin-right: 50px;"></button>
-    <button class="oneDown" onclick="OneGreenMinus()" style="float: left; margin-right: 50px;"></button>
-    <button class="oneDown" onclick="OneBlueMinus()"></button> <br>
-    <button class="fiveDown" onclick="RedMinus()" style="float: left; margin-right: 50px;"></button>
-    <button class="fiveDown" onclick="GreenMinus()" style="float: left; margin-right: 50px;"></button>
-    <button class="fiveDown" onclick="BlueMinus()"></button> <br>
+    <button class="oneDown" onclick="decrease(1, 'red')" style="float: left; margin-right: 50px;"></button>
+    <button class="oneDown" onclick="decrease(1, 'green')" style="float: left; margin-right: 50px;"></button>
+    <button class="oneDown" onclick="decrease(1, 'blue')"></button> <br>
+    <button class="fiveDown" onclick="decrease(5, 'red')" style="float: left; margin-right: 50px;"></button>
+    <button class="fiveDown" onclick="decrease(5, 'green')" style="float: left; margin-right: 50px;"></button>
+    <button class="fiveDown" onclick="decrease(5, 'blue')"></button> <br>
 
 </body>
 <script>
@@ -39,90 +39,58 @@
     document.getElementById("red").innerHTML = red
     document.getElementById("green").innerHTML = green
     document.getElementById("blue").innerHTML = blue
-    function RedPlus() {
-        if (red > 250) red = 255;
-        else red += 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("red").innerHTML = red
+
+
+    function increase(value, rgb) {
+        if (rgb == "red") {
+            red += value;
+            if (red > 255) red = 255;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("red").innerHTML = red
+        }
+        if (rgb == "green") {
+            green += value;
+            if (green > 255) green = 255;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("green").innerHTML = green
+        }
+        if (rgb == "blue") {
+            blue += value;
+            if (blue > 255) blue = 255;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("blue").innerHTML = blue
+        }
     }
-    function RedMinus() {
-        if (red < 5) red = 0;
-        else red -= 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("red").innerHTML = red
+
+    function decrease(value, rgb) {
+        if (rgb == "red") {
+            red -= value;
+            if (red < 0) red = 0;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("red").innerHTML = red
+        }
+        if (rgb == "green") {
+            green -= value;
+            if (green < 0) green = 0;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("green").innerHTML = green
+        }
+        if (rgb == "blue") {
+            blue -= value;
+            if (blue < 0) blue = 0;
+            color = `rgb(${red}, ${green}, ${blue})`
+            document.getElementById("yourColor").style.backgroundColor = color
+            document.getElementById("blue").innerHTML = blue
+        }
     }
-    function OneRedPlus() {
-        if (red == 255) red == 255
-        else red += 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("red").innerHTML = red
-    }
-    function OneRedMinus() {
-        if (red < 5) red = 0;
-        else red -= 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("red").innerHTML = red
-    }
-    function BluePlus() {
-        if (blue > 250) blue = 255;
-        else blue += 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("blue").innerHTML = blue
-    }
-    function BlueMinus() {
-        if (blue < 5) blue = 0;
-        else blue -= 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("blue").innerHTML = blue
-    }
-    function OneBluePlus() {
-        if (blue == 255) blue == 255
-        else blue += 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("blue").innerHTML = blue
-    }
-    function OneBlueMinus() {
-        if (blue < 5) blue = 0;
-        else blue -= 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("blue").innerHTML = blue
-    }
-    function GreenPlus() {
-        if (green > 250) green = 255;
-        else green += 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("green").innerHTML = green
-    }
-    function GreenMinus() {
-        if (green < 5) green = 0;
-        else green -= 5
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("green").innerHTML = green
-    }
-    function OneGreenPlus() {
-        if (green == 255) green == 255
-        else green += 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("green").innerHTML = green
-    }
-    function OneGreenMinus() {
-        if (green < 5) green = 0;
-        else green -= 1
-        color = `rgb(${red}, ${green}, ${blue})`
-        document.getElementById("yourColor").style.backgroundColor = color
-        document.getElementById("green").innerHTML = green
-    }
+
+
+
     var redAnswer = Math.round(Math.random() * 255)
     var blueAnswer = Math.round(Math.random() * 255)
     var greenAnswer = Math.round(Math.random() * 255)
