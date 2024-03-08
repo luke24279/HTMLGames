@@ -93,7 +93,7 @@ for (var i = 0; i < upgrades.length; i++) {
     let button = document.createElement('button');
     button.innerText = upgrade.name + " - " + upgrade.price + " points";
     button.name = upgrade.name;
-    button.id = i
+    button.id = i + "upgrade";
     button.disabled = !upgrade.unlocked;
     button.addEventListener('click', function () {
         if (points >= upgrade.price) {
@@ -123,7 +123,7 @@ for (var i = 0; i < techtree.length; i++) {
     //When hovering over, display description and stats
     button.title = tech.description + "\n" + tech.stats;
     button.name = tech.name;
-    button.id = i
+    button.id = i + "tech";
     button.hidden = !tech.unlocked;
     button.addEventListener('click', function () {
         if (points >= tech.price) {
@@ -158,7 +158,8 @@ function updateRequirements() {
             }
             if (tempset.has(true) && !tempset.has(false)) {
                 upgrade.unlocked = true;
-                document.getElementById(i).disabled = false;
+                console.log(document.getElementById(i + "upgrade"));
+                document.getElementById(i + "upgrade").disabled = false;
             }
         }
 
@@ -179,7 +180,7 @@ function updateRequirements() {
             }
             if (tempset.has(true) && !tempset.has(false)) {
                 tech.unlocked = true;
-                document.getElementById(i).hidden = false;
+                document.getElementById(i + "tech").hidden = false;
             }
         }
 
