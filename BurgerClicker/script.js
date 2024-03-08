@@ -14,7 +14,7 @@ var techtree = [
         name: 'Patty',
         description: 'A basic patty, nothign special.',
         stats: "Doubles Points Per Second Permanently",
-        price: 1,
+        price: 250,
         requirements: [],
         unlocked: true,
         bought: false,
@@ -26,6 +26,20 @@ var techtree = [
                 pointsPerClick += 0.2;
                 console.log("Burger Flipping Hand bought");
             }
+        }
+    },
+    {
+        name: "Cheese",
+        description: "A slice of cheese, adds flavor to the burger.",
+        stats: "All Burger Flipping Hands are 5% cheaper",
+        price: 1000,
+        requirements: [],
+        unlocked: false,
+        bought: false,
+        tier: 1,
+        effect: function () {
+            upgrades[0].price *= 0.95;
+            console.log("Cheese bought");
         }
     }
 ]
@@ -60,6 +74,7 @@ var upgrades = [
 ]
 
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
+techtree[1].requirements.push("techtree[0].bought");
 
 
 
@@ -144,6 +159,27 @@ function updateRequirements() {
             if (tempset.has(true) && !tempset.has(false)) {
                 upgrade.unlocked = true;
                 document.getElementById(i).disabled = false;
+            }
+        }
+
+    }
+    for (var i = 0; i < techtree.length; i++) {
+        let tech = techtree[i];
+        let tempset = new Set();
+        if (tech.unlocked) continue;
+        if (tech.requirements.length > 0) {
+            for (var j = 0; j < tech.requirements.length; j++) {
+                let requirement = tech.requirements[j];
+                if (eval(requirement)) {
+                    tempset.add(true);
+                }
+                else {
+                    tempset.add(false);
+                }
+            }
+            if (tempset.has(true) && !tempset.has(false)) {
+                tech.unlocked = true;
+                document.getElementById(i).hidden = false;
             }
         }
 
