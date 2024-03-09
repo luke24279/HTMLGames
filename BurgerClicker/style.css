@@ -1,4 +1,20 @@
 body {
+    font-size: 30px;
     background-color: rgb(54, 54, 54);
     color: white;
+}
+
+/* Path: index.html */
+/* Add custom layout for mobile devices */
+@media (max-width: 600px) {
+    body {
+        background-color: rgb(54, 54, 54);
+        color: white;
+        font-size: 15px;
+    }
+    /* Image inside Div with class burger */
+    .burger img {
+        width: 10%;
+        height: 50%;
+    }
 }

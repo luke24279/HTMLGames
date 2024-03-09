@@ -62,6 +62,42 @@ var techtree = [
             upgrades[2].price *= 0.95;
             console.log("Tomato bought");
         }
+    },
+    {
+        name: "Double Patty",
+        description: "Two patties, double the filling.",
+        stats: "Doubles Points Per Click Permanently",
+        price: 25000,
+        requirements: [],
+        unlocked: false,
+        bought: false,
+        tier: 1,
+        effect: function () {
+            pointsPerClick *= 2;
+            upgrades[0].effect = function () {
+                pointsPerClick += 0.4;
+                console.log("Burger Flipping Hand bought");
+            }
+        }
+    },
+    {
+        name: "Toasted Bun",
+        description: "A bun that has been toasted to perfection.",
+        stats: "Points Per Second is Increased by 50%",
+        price: 50000,
+        requirements: [],
+        unlocked: false,
+        bought: false,
+        tier: 1,
+        effect: function () {
+            pointsPerSecond *= 1.5;
+            console.log("Toasted Bun bought");
+            //Edit pointsPerSecondFunction to be 1.5x
+            pointsPerSecondFunction = function () {
+                points += (pointsPerSecond * 1.5) / 4;
+                updateText();
+            }
+        }
     }
 ]
 
@@ -151,6 +187,26 @@ if (!techtree[3].effect) {
     }
 
 }
+if (!techtree[4].effect) {
+    techtree[4].effect = function () {
+        pointsPerClick *= 2;
+        upgrades[0].effect = function () {
+            pointsPerClick += 0.4;
+            console.log("Burger Flipping Hand bought");
+        }
+    }
+}
+if (!techtree[5].effect) {
+    techtree[5].effect = function () {
+        pointsPerSecond *= 1.5;
+        console.log("Toasted Bun bought");
+        //Edit pointsPerSecondFunction to be 1.5x
+        pointsPerSecondFunction = function () {
+            points += (pointsPerSecond * 1.5) / 4;
+            updateText();
+        }
+    }
+}
 if (!upgrades[0].effect) {
     upgrades[0].effect = function () {
         pointsPerClick += 0.1;
@@ -173,8 +229,10 @@ updateText();
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
 upgrades[2].requirements.push("upgrades[1].totalBought >= 25");
 techtree[1].requirements.push("techtree[0].bought");
-techtree[2].requirements.push("techtree[0].bought");
-techtree[3].requirements.push("techtree[0].bought");
+techtree[2].requirements.push("techtree[1].bought");
+techtree[3].requirements.push("techtree[2].bought");
+techtree[4].requirements.push("techtree[3].bought", "!techtree[5].bought");
+techtree[5].requirements.push("techtree[3].bought", "!techtree[4].bought");
 
 
 
@@ -200,14 +258,17 @@ function rounded(number) {
 
 function clickBurger() {
     points += pointsPerClick;
+    points = Math.round(points * 1000) / 1000;
     updateText();
 }
 
 function pointsPerSecondFunction() {
-    points += pointsPerSecond/4;
+    points += pointsPerSecond / 4;
+    points = Math.round(points * 1000) / 1000;
+    console.log(points);
     updateText();
 }
-setInterval(pointsPerSecondFunction, 1000/4);
+setInterval(pointsPerSecondFunction, 1000 / 4);
 
 function updateRequirements() {
     for (var i = 0; i < upgrades.length; i++) {
@@ -235,7 +296,7 @@ function updateRequirements() {
     for (var i = 0; i < techtree.length; i++) {
         let tech = techtree[i];
         let tempset = new Set();
-        if (tech.unlocked) continue;
+        //if (tech.unlocked) continue;
         if (tech.requirements.length > 0) {
             for (var j = 0; j < tech.requirements.length; j++) {
                 let requirement = tech.requirements[j];
@@ -246,10 +307,15 @@ function updateRequirements() {
                     tempset.add(false);
                 }
             }
-            if (tempset.has(true) && !tempset.has(false)) {
+            if (tempset.has(true) && !tempset.has(false) && !tech.bought) {
                 tech.unlocked = true;
                 document.getElementById(i + "tech").hidden = false;
             }
+            // Allows for a split tech tree, where you can only buy the techs on one side of the tree
+            // else {
+            //     tech.unlocked = false;
+            //     document.getElementById(i + "tech").hidden = true;
+            // }
         }
 
     }
@@ -330,7 +396,7 @@ for (var i = 0; i < upgrades.length; i++) {
         if (points >= upgrade.price) {
             upgrade.effect();
             points -= upgrade.price;
-    
+
             upgrade.totalBought += 1;
             upgrade.price = upgrade.price * upgrade.priceMultiplier;
             //Update cost
@@ -358,7 +424,7 @@ for (var i = 0; i < techtree.length; i++) {
         if (points >= tech.price) {
             tech.effect();
             points -= tech.price;
-    
+
             updateText();
             tech.bought = true;
             button.hidden = true;
