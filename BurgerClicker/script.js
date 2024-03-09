@@ -1,12 +1,12 @@
-var points = 1000;
+var points = 0;
 var pointsPerClick = 1;
 var pointsPerSecond = 0;
-
+//Define Tech Tree and Upgrades
 var techtree = [
     {
         name: 'Patty',
         description: 'A basic patty, nothing special.',
-        stats: "Doubles Points Per Second Permanently",
+        stats: "Doubles Points Per Click Permanently",
         price: 250,
         requirements: [],
         unlocked: true,
@@ -107,11 +107,14 @@ var upgrades = [
     }
 ]
 
+
+
+
+
+
+
 //Run loadGame(), and if there is save data, add the effect fuctions to the upgrades and techtree items
 loadGame();
-updateText();
-
-
 if (!techtree[0].effect) {
     techtree[0].effect = function () {
         pointsPerClick *= 2;
@@ -141,8 +144,6 @@ if (!techtree[2].effect) {
     }
 
 }
-
-
 if (!techtree[3].effect) {
     techtree[3].effect = function () {
         upgrades[2].price *= 0.95;
@@ -150,11 +151,6 @@ if (!techtree[3].effect) {
     }
 
 }
-
-
-
-
-
 if (!upgrades[0].effect) {
     upgrades[0].effect = function () {
         pointsPerClick += 0.1;
@@ -173,9 +169,7 @@ if (!upgrades[2].effect) {
         console.log("Burger Assembly Line bought");
     }
 }
-
-
-
+updateText();
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
 upgrades[2].requirements.push("upgrades[1].totalBought >= 25");
 techtree[1].requirements.push("techtree[0].bought");
@@ -184,64 +178,36 @@ techtree[3].requirements.push("techtree[0].bought");
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Define functions
 function rounded(number) {
     return Math.round(number * 10) / 10;
-
 }
+
 function clickBurger() {
     points += pointsPerClick;
-    points = rounded(points);
     updateText();
 }
 
-for (var i = 0; i < upgrades.length; i++) {
-    let upgrade = upgrades[i];
-    let button = document.createElement('button');
-    button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
-    button.name = upgrade.name;
-    button.id = i + "upgrade";
-    button.disabled = !upgrade.unlocked;
-    button.addEventListener('click', function () {
-        if (points >= upgrade.price) {
-            upgrade.effect();
-            points -= upgrade.price;
-            points = rounded(points);
-            upgrade.totalBought += 1;
-            upgrade.price = upgrade.price * upgrade.priceMultiplier;
-            //Update cost
-            //Update button text 
-            button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
-            updateText();
-            updateRequirements();
-        }
-    });
-    document.getElementById('upgrades').appendChild(button);
+function pointsPerSecondFunction() {
+    points += pointsPerSecond/4;
+    updateText();
 }
-
-document.getElementById("techtreeDialog").appendChild(document.createElement('br'));
-for (var i = 0; i < techtree.length; i++) {
-    //Create a button for each techtree item
-    let tech = techtree[i];
-    let button = document.createElement('button');
-    button.innerText = tech.name + " - " + rounded(tech.price) + " points";
-    //When hovering over, display description and stats
-    button.title = tech.description + "\n" + tech.stats;
-    button.name = tech.name;
-    button.id = i + "tech";
-    if (!tech.unlocked || tech.bought) button.hidden = true;
-    button.addEventListener('click', function () {
-        if (points >= tech.price) {
-            tech.effect();
-            points -= tech.price;
-            points = rounded(points);
-            updateText();
-            tech.bought = true;
-            button.hidden = true;
-            updateRequirements();
-        }
-    });
-    document.getElementById('techtreeDialog').appendChild(button);
-}
+setInterval(pointsPerSecondFunction, 1000/4);
 
 function updateRequirements() {
     for (var i = 0; i < upgrades.length; i++) {
@@ -289,14 +255,11 @@ function updateRequirements() {
     }
 }
 
-
 function updateText() {
     document.getElementById('points').innerText = rounded(points) + " points";
     document.getElementById('pointsPerSecond').innerText = rounded(pointsPerSecond) + " points per second";
     document.getElementById('pointsPerClick').innerText = rounded(pointsPerClick) + " points per click";
-
 }
-
 
 // Save game state
 function saveGame() {
@@ -325,15 +288,6 @@ function loadGame() {
     }
 }
 
-
-
-
-window.onbeforeunload = function () {
-    saveGame(); // Call your function here
-    return null; // In some browsers, a string returned here will be displayed in a confirmation dialog
-};
-
-
 function restart() {
     // Ignore the window.onbeforeunload event
     window.onbeforeunload = null;
@@ -350,9 +304,80 @@ function restart() {
 
 
 
-function pointsPerSecondFunction() {
-    points += pointsPerSecond;
-    points = rounded(points);
-    updateText();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Create buttons for each upgrade and techtree item
+for (var i = 0; i < upgrades.length; i++) {
+    let upgrade = upgrades[i];
+    let button = document.createElement('button');
+    button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
+    button.name = upgrade.name;
+    button.id = i + "upgrade";
+    button.disabled = !upgrade.unlocked;
+    button.addEventListener('click', function () {
+        if (points >= upgrade.price) {
+            upgrade.effect();
+            points -= upgrade.price;
+    
+            upgrade.totalBought += 1;
+            upgrade.price = upgrade.price * upgrade.priceMultiplier;
+            //Update cost
+            //Update button text 
+            button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
+            updateText();
+            updateRequirements();
+        }
+    });
+    document.getElementById('upgrades').appendChild(button);
 }
-setInterval(pointsPerSecondFunction, 1000);
+
+document.getElementById("techtreeDialog").appendChild(document.createElement('br'));
+for (var i = 0; i < techtree.length; i++) {
+    //Create a button for each techtree item
+    let tech = techtree[i];
+    let button = document.createElement('button');
+    button.innerText = tech.name + " - " + rounded(tech.price) + " points";
+    //When hovering over, display description and stats
+    button.title = tech.description + "\n" + tech.stats;
+    button.name = tech.name;
+    button.id = i + "tech";
+    if (!tech.unlocked || tech.bought) button.hidden = true;
+    button.addEventListener('click', function () {
+        if (points >= tech.price) {
+            tech.effect();
+            points -= tech.price;
+    
+            updateText();
+            tech.bought = true;
+            button.hidden = true;
+            updateRequirements();
+        }
+    });
+    document.getElementById('techtreeDialog').appendChild(button);
+}
+
+
+
+
+
+
+
+// Save game state when the window is about to be closed
+window.onbeforeunload = function () {
+    saveGame(); // Call your function here
+    return null; // In some browsers, a string returned here will be displayed in a confirmation dialog
+};
+
+
