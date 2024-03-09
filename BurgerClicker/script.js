@@ -2,17 +2,10 @@ var points = 1000;
 var pointsPerClick = 1;
 var pointsPerSecond = 0;
 
-document.getElementById('points').innerText = points + " points";
-document.getElementById('pointsPerSecond').innerText = pointsPerSecond + " points per second";
-document.getElementById('pointsPerClick').innerText = pointsPerClick + " points per click";
-
-
-
-
 var techtree = [
     {
         name: 'Patty',
-        description: 'A basic patty, nothign special.',
+        description: 'A basic patty, nothing special.',
         stats: "Doubles Points Per Second Permanently",
         price: 250,
         requirements: [],
@@ -40,6 +33,34 @@ var techtree = [
         effect: function () {
             upgrades[0].price *= 0.95;
             console.log("Cheese bought");
+        }
+    },
+    {
+        name: "Lettuce",
+        description: "Adds a bit of crunch to the burger.",
+        stats: "All Robotic Spatulas are 5% cheaper",
+        price: 5000,
+        requirements: [],
+        unlocked: false,
+        bought: false,
+        tier: 1,
+        effect: function () {
+            upgrades[1].price *= 0.95;
+            console.log("Lettuce bought");
+        }
+    },
+    {
+        name: "Tomato",
+        description: "Adds a bit of juiciness to the burger.",
+        stats: "All Burger Assembly Lines are 5% cheaper",
+        price: 10000,
+        requirements: [],
+        unlocked: false,
+        bought: false,
+        tier: 1,
+        effect: function () {
+            upgrades[2].price *= 0.95;
+            console.log("Tomato bought");
         }
     }
 ]
@@ -70,11 +91,96 @@ var upgrades = [
             pointsPerSecond += 0.1;
             console.log("Robotic Spatula bought");
         }
+    },
+    {
+        name: "Burger Assembly Line",
+        description: "Automatically assembles burgers for you.",
+        price: 100 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
+        priceMultiplier: 1.2,
+        requirements: [],
+        unlocked: false,
+        totalBought: 0,
+        effect: function () {
+            pointsPerSecond += 1;
+            console.log("Burger Assembly Line bought");
+        }
     }
 ]
 
+//Run loadGame(), and if there is save data, add the effect fuctions to the upgrades and techtree items
+loadGame();
+updateText();
+
+
+if (!techtree[0].effect) {
+    techtree[0].effect = function () {
+        pointsPerClick *= 2;
+        //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
+        upgrades[0].effect = function () {
+            pointsPerClick += 0.2;
+            console.log("Burger Flipping Hand bought");
+        }
+    }
+    if (techtree[0].bought) {
+        upgrades[0].effect = function () {
+            pointsPerClick += 0.2;
+            console.log("Burger Flipping Hand bought");
+        }
+    }
+}
+if (!techtree[1].effect) {
+    techtree[1].effect = function () {
+        upgrades[0].price *= 0.95;
+        console.log("Cheese bought");
+    }
+}
+if (!techtree[2].effect) {
+    techtree[2].effect = function () {
+        upgrades[1].price *= 0.95;
+        console.log("Lettuce bought");
+    }
+
+}
+
+
+if (!techtree[3].effect) {
+    techtree[3].effect = function () {
+        upgrades[2].price *= 0.95;
+        console.log("Tomato bought");
+    }
+
+}
+
+
+
+
+
+if (!upgrades[0].effect) {
+    upgrades[0].effect = function () {
+        pointsPerClick += 0.1;
+        console.log("Burger Flipping Hand bought");
+    }
+}
+if (!upgrades[1].effect) {
+    upgrades[1].effect = function () {
+        pointsPerSecond += 0.1;
+        console.log("Robotic Spatula bought");
+    }
+}
+if (!upgrades[2].effect) {
+    upgrades[2].effect = function () {
+        pointsPerSecond += 1;
+        console.log("Burger Assembly Line bought");
+    }
+}
+
+
+
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
+upgrades[2].requirements.push("upgrades[1].totalBought >= 25");
 techtree[1].requirements.push("techtree[0].bought");
+techtree[2].requirements.push("techtree[0].bought");
+techtree[3].requirements.push("techtree[0].bought");
 
 
 
@@ -85,13 +191,13 @@ function rounded(number) {
 function clickBurger() {
     points += pointsPerClick;
     points = rounded(points);
-    document.getElementById('points').innerText = points + " points";
+    updateText();
 }
 
 for (var i = 0; i < upgrades.length; i++) {
     let upgrade = upgrades[i];
     let button = document.createElement('button');
-    button.innerText = upgrade.name + " - " + upgrade.price + " points";
+    button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
     button.name = upgrade.name;
     button.id = i + "upgrade";
     button.disabled = !upgrade.unlocked;
@@ -105,41 +211,37 @@ for (var i = 0; i < upgrades.length; i++) {
             //Update cost
             //Update button text 
             button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
-            document.getElementById('points').innerText = points + " points";
-            document.getElementById('pointsPerSecond').innerText = rounded(pointsPerSecond) + " points per second";
-            document.getElementById('pointsPerClick').innerText = rounded(pointsPerClick) + " points per click";
+            updateText();
             updateRequirements();
         }
     });
     document.getElementById('upgrades').appendChild(button);
 }
 
-
+document.getElementById("techtreeDialog").appendChild(document.createElement('br'));
 for (var i = 0; i < techtree.length; i++) {
     //Create a button for each techtree item
     let tech = techtree[i];
     let button = document.createElement('button');
-    button.innerText = tech.name + " - " + tech.price + " points";
+    button.innerText = tech.name + " - " + rounded(tech.price) + " points";
     //When hovering over, display description and stats
     button.title = tech.description + "\n" + tech.stats;
     button.name = tech.name;
     button.id = i + "tech";
-    button.hidden = !tech.unlocked;
+    if (!tech.unlocked || tech.bought) button.hidden = true;
     button.addEventListener('click', function () {
         if (points >= tech.price) {
             tech.effect();
             points -= tech.price;
             points = rounded(points);
-            document.getElementById('points').innerText = points + " points";
+            updateText();
             tech.bought = true;
             button.hidden = true;
             updateRequirements();
         }
     });
-    document.getElementById('techtreeDialog').appendChild(document.createElement('br'));
     document.getElementById('techtreeDialog').appendChild(button);
 }
-
 
 function updateRequirements() {
     for (var i = 0; i < upgrades.length; i++) {
@@ -187,9 +289,70 @@ function updateRequirements() {
     }
 }
 
+
+function updateText() {
+    document.getElementById('points').innerText = rounded(points) + " points";
+    document.getElementById('pointsPerSecond').innerText = rounded(pointsPerSecond) + " points per second";
+    document.getElementById('pointsPerClick').innerText = rounded(pointsPerClick) + " points per click";
+
+}
+
+
+// Save game state
+function saveGame() {
+    var gameData = {
+        techtree: techtree,
+        upgrades: upgrades,
+        // Add other game variables here
+        points: points,
+        pointsPerClick: pointsPerClick,
+        pointsPerSecond: pointsPerSecond
+    };
+    localStorage.setItem('gameData', JSON.stringify(gameData));
+}
+
+// Load game state
+function loadGame() {
+    var savedData = localStorage.getItem('gameData');
+    if (savedData) {
+        savedData = JSON.parse(savedData);
+        if (savedData.techtree) techtree = savedData.techtree;
+        if (savedData.upgrades) upgrades = savedData.upgrades;
+        if (savedData.points) points = savedData.points;
+        if (savedData.pointsPerClick) pointsPerClick = savedData.pointsPerClick;
+        if (savedData.pointsPerSecond) pointsPerSecond = savedData.pointsPerSecond;
+        // Load other game variables here
+    }
+}
+
+
+
+
+window.onbeforeunload = function () {
+    saveGame(); // Call your function here
+    return null; // In some browsers, a string returned here will be displayed in a confirmation dialog
+};
+
+
+function restart() {
+    // Ignore the window.onbeforeunload event
+    window.onbeforeunload = null;
+    localStorage.removeItem('gameData');
+    location.reload();
+}
+
+
+
+
+
+
+
+
+
+
 function pointsPerSecondFunction() {
     points += pointsPerSecond;
     points = rounded(points);
-    document.getElementById('points').innerText = points + " points";
+    updateText();
 }
 setInterval(pointsPerSecondFunction, 1000);
