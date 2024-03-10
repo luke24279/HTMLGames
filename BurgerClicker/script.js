@@ -265,7 +265,6 @@ function clickBurger() {
 function pointsPerSecondFunction() {
     points += pointsPerSecond / 4;
     points = Math.round(points * 1000) / 1000;
-    console.log(points);
     updateText();
 }
 setInterval(pointsPerSecondFunction, 1000 / 4);
@@ -287,7 +286,6 @@ function updateRequirements() {
             }
             if (tempset.has(true) && !tempset.has(false)) {
                 upgrade.unlocked = true;
-                console.log(document.getElementById(i + "upgrade"));
                 document.getElementById(i + "upgrade").disabled = false;
             }
         }
@@ -312,10 +310,10 @@ function updateRequirements() {
                 document.getElementById(i + "tech").hidden = false;
             }
             // Allows for a split tech tree, where you can only buy the techs on one side of the tree
-            // else {
-            //     tech.unlocked = false;
-            //     document.getElementById(i + "tech").hidden = true;
-            // }
+            else {
+                tech.unlocked = false;
+                document.getElementById(i + "tech").hidden = true;
+            }
         }
 
     }
@@ -410,6 +408,35 @@ for (var i = 0; i < upgrades.length; i++) {
 }
 
 document.getElementById("techtreeDialog").appendChild(document.createElement('br'));
+
+
+
+//Add buttons to access each tier of the tech tree
+for (let i = 1; i <= 2; i++) {
+    let button = document.createElement('button');
+    button.innerText = "Tier " + i;
+    button.addEventListener('click', function () {
+        for (let tier1 of document.getElementsByClassName('tier1')) {
+            tier1.hidden = true;
+        }
+        for (let tier2 of document.getElementsByClassName('tier2')) {
+            tier2.hidden = true;
+        }
+        for (let show of document.getElementsByClassName('tier' + i)) {
+            //Only show the ones that are unlocked and not bought
+            //Show is the button on the html file, find the techtree item that matches the name of the button
+            let tech = techtree.find(tech => tech.name === show.name);
+            if (tech.bought) continue;
+            if (!tech.unlocked) continue;
+            show.hidden = false;
+        }
+    });
+    document.getElementById('techtreeDialog').appendChild(button);
+}
+
+
+
+document.getElementById("techtreeDialog").appendChild(document.createElement('br'));
 for (var i = 0; i < techtree.length; i++) {
     //Create a button for each techtree item
     let tech = techtree[i];
@@ -419,12 +446,14 @@ for (var i = 0; i < techtree.length; i++) {
     button.title = tech.description + "\n" + tech.stats;
     button.name = tech.name;
     button.id = i + "tech";
+    //Give button a class
+    button.classList.add("tier" + tech.tier);
     if (!tech.unlocked || tech.bought) button.hidden = true;
     button.addEventListener('click', function () {
+        //log the tech's class
         if (points >= tech.price) {
             tech.effect();
             points -= tech.price;
-
             updateText();
             tech.bought = true;
             button.hidden = true;
