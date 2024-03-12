@@ -12,14 +12,14 @@ var techtree = [
         unlocked: true,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             pointsPerClick *= 2;
             //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
             upgrades[0].effect = function () {
                 pointsPerClick += 0.2;
                 console.log("Burger Flipping Hand bought");
             }
-        }
+        })()`
     },
     {
         name: "Cheese",
@@ -30,10 +30,10 @@ var techtree = [
         unlocked: false,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             upgrades[0].price *= 0.95;
             console.log("Cheese bought");
-        }
+        })()`
     },
     {
         name: "Lettuce",
@@ -44,10 +44,10 @@ var techtree = [
         unlocked: false,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             upgrades[1].price *= 0.95;
             console.log("Lettuce bought");
-        }
+        })()`
     },
     {
         name: "Tomato",
@@ -58,10 +58,10 @@ var techtree = [
         unlocked: false,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             upgrades[2].price *= 0.95;
             console.log("Tomato bought");
-        }
+        })()`
     },
     {
         name: "Double Patty",
@@ -72,13 +72,13 @@ var techtree = [
         unlocked: false,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             pointsPerClick *= 2;
             upgrades[0].effect = function () {
                 pointsPerClick += 0.4;
                 console.log("Burger Flipping Hand bought");
             }
-        }
+        })()`
     },
     {
         name: "Toasted Bun",
@@ -89,7 +89,7 @@ var techtree = [
         unlocked: false,
         bought: false,
         tier: 1,
-        effect: function () {
+        effect: `(() => {
             pointsPerSecond *= 1.5;
             console.log("Toasted Bun bought");
             //Edit pointsPerSecondFunction to be 1.5x
@@ -97,7 +97,7 @@ var techtree = [
                 points += (pointsPerSecond * 1.5) / 4;
                 updateText();
             }
-        }
+        })()`
     }
 ]
 
@@ -110,10 +110,10 @@ var upgrades = [
         requirements: [],
         unlocked: true,
         totalBought: 0,
-        effect: function () {
+        effect: `(() => {
             pointsPerClick += 0.1;
             console.log("Burger Flipping Hand bought");
-        }
+        })()`
     },
     {
         name: "Robotic Spatula",
@@ -123,10 +123,10 @@ var upgrades = [
         requirements: [],
         unlocked: false,
         totalBought: 0,
-        effect: function () {
+        effect: `(() => {
             pointsPerSecond += 0.1;
             console.log("Robotic Spatula bought");
-        }
+        })()`
     },
     {
         name: "Burger Assembly Line",
@@ -136,10 +136,10 @@ var upgrades = [
         requirements: [],
         unlocked: false,
         totalBought: 0,
-        effect: function () {
+        effect: `(() => {
             pointsPerSecond += 1;
             console.log("Burger Assembly Line bought");
-        }
+        })()`
     }
 ]
 
@@ -151,80 +151,80 @@ var upgrades = [
 
 //Run loadGame(), and if there is save data, add the effect fuctions to the upgrades and techtree items
 loadGame();
-if (!techtree[0].effect) {
-    techtree[0].effect = function () {
-        pointsPerClick *= 2;
-        //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
-        upgrades[0].effect = function () {
-            pointsPerClick += 0.2;
-            console.log("Burger Flipping Hand bought");
-        }
-    }
-    if (techtree[0].bought) {
-        upgrades[0].effect = function () {
-            pointsPerClick += 0.2;
-            console.log("Burger Flipping Hand bought");
-        }
-    }
-}
-if (!techtree[1].effect) {
-    techtree[1].effect = function () {
-        upgrades[0].price *= 0.95;
-        console.log("Cheese bought");
-    }
-}
-if (!techtree[2].effect) {
-    techtree[2].effect = function () {
-        upgrades[1].price *= 0.95;
-        console.log("Lettuce bought");
-    }
+// if (!techtree[0].effect) {
+//     techtree[0].effect = function () {
+//         pointsPerClick *= 2;
+//         //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
+//         upgrades[0].effect = function () {
+//             pointsPerClick += 0.2;
+//             console.log("Burger Flipping Hand bought");
+//         }
+//     }
+//     if (techtree[0].bought) {
+//         upgrades[0].effect = function () {
+//             pointsPerClick += 0.2;
+//             console.log("Burger Flipping Hand bought");
+//         }
+//     }
+// }
+// if (!techtree[1].effect) {
+//     techtree[1].effect = function () {
+//         upgrades[0].price *= 0.95;
+//         console.log("Cheese bought");
+//     }
+// }
+// if (!techtree[2].effect) {
+//     techtree[2].effect = function () {
+//         upgrades[1].price *= 0.95;
+//         console.log("Lettuce bought");
+//     }
 
-}
-if (!techtree[3].effect) {
-    techtree[3].effect = function () {
-        upgrades[2].price *= 0.95;
-        console.log("Tomato bought");
-    }
+// }
+// if (!techtree[3].effect) {
+//     techtree[3].effect = function () {
+//         upgrades[2].price *= 0.95;
+//         console.log("Tomato bought");
+//     }
 
-}
-if (!techtree[4].effect) {
-    techtree[4].effect = function () {
-        pointsPerClick *= 2;
-        upgrades[0].effect = function () {
-            pointsPerClick += 0.4;
-            console.log("Burger Flipping Hand bought");
-        }
-    }
-}
-if (!techtree[5].effect) {
-    techtree[5].effect = function () {
-        pointsPerSecond *= 1.5;
-        console.log("Toasted Bun bought");
-        //Edit pointsPerSecondFunction to be 1.5x
-        pointsPerSecondFunction = function () {
-            points += (pointsPerSecond * 1.5) / 4;
-            updateText();
-        }
-    }
-}
-if (!upgrades[0].effect) {
-    upgrades[0].effect = function () {
-        pointsPerClick += 0.1;
-        console.log("Burger Flipping Hand bought");
-    }
-}
-if (!upgrades[1].effect) {
-    upgrades[1].effect = function () {
-        pointsPerSecond += 0.1;
-        console.log("Robotic Spatula bought");
-    }
-}
-if (!upgrades[2].effect) {
-    upgrades[2].effect = function () {
-        pointsPerSecond += 1;
-        console.log("Burger Assembly Line bought");
-    }
-}
+// }
+// if (!techtree[4].effect) {
+//     techtree[4].effect = function () {
+//         pointsPerClick *= 2;
+//         upgrades[0].effect = function () {
+//             pointsPerClick += 0.4;
+//             console.log("Burger Flipping Hand bought");
+//         }
+//     }
+// }
+// if (!techtree[5].effect) {
+//     techtree[5].effect = function () {
+//         pointsPerSecond *= 1.5;
+//         console.log("Toasted Bun bought");
+//         //Edit pointsPerSecondFunction to be 1.5x
+//         pointsPerSecondFunction = function () {
+//             points += (pointsPerSecond * 1.5) / 4;
+//             updateText();
+//         }
+//     }
+// }
+// if (!upgrades[0].effect) {
+//     upgrades[0].effect = function () {
+//         pointsPerClick += 0.1;
+//         console.log("Burger Flipping Hand bought");
+//     }
+// }
+// if (!upgrades[1].effect) {
+//     upgrades[1].effect = function () {
+//         pointsPerSecond += 0.1;
+//         console.log("Robotic Spatula bought");
+//     }
+// }
+// if (!upgrades[2].effect) {
+//     upgrades[2].effect = function () {
+//         pointsPerSecond += 1;
+//         console.log("Burger Assembly Line bought");
+//     }
+// }
 updateText();
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
 upgrades[2].requirements.push("upgrades[1].totalBought >= 25");
@@ -392,9 +392,8 @@ for (var i = 0; i < upgrades.length; i++) {
     button.disabled = !upgrade.unlocked;
     button.addEventListener('click', function () {
         if (points >= upgrade.price) {
-            upgrade.effect();
+            eval(upgrade.effect);
             points -= upgrade.price;
-
             upgrade.totalBought += 1;
             upgrade.price = upgrade.price * upgrade.priceMultiplier;
             //Update cost
@@ -452,7 +451,7 @@ for (var i = 0; i < techtree.length; i++) {
     button.addEventListener('click', function () {
         //log the tech's class
         if (points >= tech.price) {
-            tech.effect();
+            eval(tech.effect);
             points -= tech.price;
             updateText();
             tech.bought = true;
