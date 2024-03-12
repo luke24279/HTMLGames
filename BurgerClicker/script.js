@@ -93,7 +93,7 @@ var techtree = [
 var upgrades = [
     {
         name: 'Burger Flipping Hand',
-        description: 'Increase the amount of points you get per burger click. Owned: ' + this.totalBought,
+        description: 'Increase the amount of points you get per burger click. Owned: ' + (this.totalBought || 0),
         price: 10 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.1,
         requirements: [],
@@ -106,7 +106,7 @@ var upgrades = [
     },
     {
         name: "Robotic Spatula",
-        description: "An AI controlled spatula that flips burgers for you. Owned: " + this.totalBought,
+        description: "An AI controlled spatula that flips burgers for you. Owned: " + (this.totalBought || 0),
         price: 50 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.1,
         requirements: [],
@@ -119,7 +119,7 @@ var upgrades = [
     },
     {
         name: "Burger Assembly Line",
-        description: "Automatically assembles burgers for you. Owned: " + this.totalBought,
+        description: "Automatically assembles burgers for you. Owned: " + (this.totalBought || 0),
         price: 100 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.2,
         requirements: [],
@@ -321,6 +321,7 @@ for (var i = 0; i < upgrades.length; i++) {
     button.innerText = upgrade.name + " - " + rounded(upgrade.price) + " points";
     button.name = upgrade.name;
     button.id = i + "upgrade";
+    button.title = upgrade.description;
     button.disabled = !upgrade.unlocked;
     button.addEventListener('click', function () {
         if (points >= upgrade.price) {
