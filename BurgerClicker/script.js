@@ -1,6 +1,9 @@
 var points = 0;
 var pointsPerClick = 1;
 var pointsPerSecond = 0;
+var ppcMultiplier = [1]
+var ppsMultiplier = [1]
+var multiplierForPPC = 1, multiplierForPPS = 1;
 //Define Tech Tree and Upgrades
 var techtree = [
     {
@@ -13,12 +16,8 @@ var techtree = [
         bought: false,
         tier: 1,
         effect: `(() => {
-            pointsPerClick *= 2;
-            //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
-            upgrades[0].effect = function () {
-                pointsPerClick += 0.2;
-                console.log("Burger Flipping Hand bought");
-            }
+            ppcMultiplier.push(2);
+            console.log("Patty bought");
         })()`
     },
     {
@@ -73,11 +72,7 @@ var techtree = [
         bought: false,
         tier: 1,
         effect: `(() => {
-            pointsPerClick *= 2;
-            upgrades[0].effect = function () {
-                pointsPerClick += 0.4;
-                console.log("Burger Flipping Hand bought");
-            }
+            ppcMultiplier.push(2);
         })()`
     },
     {
@@ -90,13 +85,7 @@ var techtree = [
         bought: false,
         tier: 1,
         effect: `(() => {
-            pointsPerSecond *= 1.5;
-            console.log("Toasted Bun bought");
-            //Edit pointsPerSecondFunction to be 1.5x
-            pointsPerSecondFunction = function () {
-                points += (pointsPerSecond * 1.5) / 4;
-                updateText();
-            }
+            ppsMultiplier.push(1.5);
         })()`
     }
 ]
@@ -104,40 +93,40 @@ var techtree = [
 var upgrades = [
     {
         name: 'Burger Flipping Hand',
-        description: 'Increase the amount of points you get per burger click.',
+        description: 'Increase the amount of points you get per burger click. Owned: ' + this.totalBought,
         price: 10 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.1,
         requirements: [],
         unlocked: true,
         totalBought: 0,
         effect: `(() => {
-            pointsPerClick += 0.1;
+            pointsPerClick += 0.1 * multiplierForPPC;
             console.log("Burger Flipping Hand bought");
         })()`
     },
     {
         name: "Robotic Spatula",
-        description: "An AI controlled spatula that flips burgers for you.",
+        description: "An AI controlled spatula that flips burgers for you. Owned: " + this.totalBought,
         price: 50 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.1,
         requirements: [],
         unlocked: false,
         totalBought: 0,
         effect: `(() => {
-            pointsPerSecond += 0.1;
+            pointsPerSecond += 0.1 * multiplierForPPS;
             console.log("Robotic Spatula bought");
         })()`
     },
     {
         name: "Burger Assembly Line",
-        description: "Automatically assembles burgers for you.",
+        description: "Automatically assembles burgers for you. Owned: " + this.totalBought,
         price: 100 * Math.pow(this.priceMultiplier, (this.totalBought) ? this.totalBought : 0),
         priceMultiplier: 1.2,
         requirements: [],
         unlocked: false,
         totalBought: 0,
         effect: `(() => {
-            pointsPerSecond += 1;
+            pointsPerSecond += 1 * multiplierForPPS;
             console.log("Burger Assembly Line bought");
         })()`
     }
@@ -151,80 +140,6 @@ var upgrades = [
 
 //Run loadGame(), and if there is save data, add the effect fuctions to the upgrades and techtree items
 loadGame();
-// if (!techtree[0].effect) {
-//     techtree[0].effect = function () {
-//         pointsPerClick *= 2;
-//         //I want the upgrades[0].effect's first line in the function to now be +0.2 instead of +0.1
-//         upgrades[0].effect = function () {
-//             pointsPerClick += 0.2;
-//             console.log("Burger Flipping Hand bought");
-//         }
-//     }
-//     if (techtree[0].bought) {
-//         upgrades[0].effect = function () {
-//             pointsPerClick += 0.2;
-//             console.log("Burger Flipping Hand bought");
-//         }
-//     }
-// }
-// if (!techtree[1].effect) {
-//     techtree[1].effect = function () {
-//         upgrades[0].price *= 0.95;
-//         console.log("Cheese bought");
-//     }
-// }
-// if (!techtree[2].effect) {
-//     techtree[2].effect = function () {
-//         upgrades[1].price *= 0.95;
-//         console.log("Lettuce bought");
-//     }
-
-// }
-// if (!techtree[3].effect) {
-//     techtree[3].effect = function () {
-//         upgrades[2].price *= 0.95;
-//         console.log("Tomato bought");
-//     }
-
-// }
-// if (!techtree[4].effect) {
-//     techtree[4].effect = function () {
-//         pointsPerClick *= 2;
-//         upgrades[0].effect = function () {
-//             pointsPerClick += 0.4;
-//             console.log("Burger Flipping Hand bought");
-//         }
-//     }
-// }
-// if (!techtree[5].effect) {
-//     techtree[5].effect = function () {
-//         pointsPerSecond *= 1.5;
-//         console.log("Toasted Bun bought");
-//         //Edit pointsPerSecondFunction to be 1.5x
-//         pointsPerSecondFunction = function () {
-//             points += (pointsPerSecond * 1.5) / 4;
-//             updateText();
-//         }
-//     }
-// }
-// if (!upgrades[0].effect) {
-//     upgrades[0].effect = function () {
-//         pointsPerClick += 0.1;
-//         console.log("Burger Flipping Hand bought");
-//     }
-// }
-// if (!upgrades[1].effect) {
-//     upgrades[1].effect = function () {
-//         pointsPerSecond += 0.1;
-//         console.log("Robotic Spatula bought");
-//     }
-// }
-// if (!upgrades[2].effect) {
-//     upgrades[2].effect = function () {
-//         pointsPerSecond += 1;
-//         console.log("Burger Assembly Line bought");
-//     }
-// }
 updateText();
 upgrades[1].requirements.push("upgrades[0].totalBought >= 5");
 upgrades[2].requirements.push("upgrades[1].totalBought >= 25");
@@ -256,16 +171,30 @@ function rounded(number) {
     return Math.round(number * 10) / 10;
 }
 
-function clickBurger() {
-    points += pointsPerClick;
+function pointsPerClickFunction(add = true) {
+    pointsPerClick /= multiplierForPPC;
+    multiplierForPPC = 1
+    for (let multipliers of ppcMultiplier) {
+        //Multiply the points per click by the multiplier
+        multiplierForPPC *= multipliers;
+    }
+    pointsPerClick *= multiplierForPPC;
+    if (add == true) points += pointsPerClick
     points = Math.round(points * 1000) / 1000;
-    updateText();
+    if (add == true) updateText();
 }
 
-function pointsPerSecondFunction() {
-    points += pointsPerSecond / 4;
+function pointsPerSecondFunction(add = true) {
+    pointsPerSecond /= multiplierForPPS;
+    multiplierForPPS = 1;
+    for (let multipliers of ppsMultiplier) {
+        //Multiply the points per second by the multiplier
+        multiplierForPPS *= multipliers;
+    }
+    pointsPerSecond *= multiplierForPPS;
+    if (add == true) points += pointsPerSecond / 4;
     points = Math.round(points * 1000) / 1000;
-    updateText();
+    if (add == true) updateText();
 }
 setInterval(pointsPerSecondFunction, 1000 / 4);
 
@@ -317,9 +246,12 @@ function updateRequirements() {
         }
 
     }
+    updateText();
 }
 
 function updateText() {
+    pointsPerClickFunction(false);
+    pointsPerSecondFunction(false);
     document.getElementById('points').innerText = rounded(points) + " points";
     document.getElementById('pointsPerSecond').innerText = rounded(pointsPerSecond) + " points per second";
     document.getElementById('pointsPerClick').innerText = rounded(pointsPerClick) + " points per click";
@@ -453,9 +385,9 @@ for (var i = 0; i < techtree.length; i++) {
         if (points >= tech.price) {
             eval(tech.effect);
             points -= tech.price;
-            updateText();
             tech.bought = true;
             button.hidden = true;
+            updateText();
             updateRequirements();
         }
     });
