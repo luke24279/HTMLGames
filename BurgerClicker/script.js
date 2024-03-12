@@ -18,6 +18,7 @@ var techtree = [
         effect: `(() => {
             ppcMultiplier.push(2);
             console.log("Patty bought");
+            document.getElementById("burger").src = "images/patty.png";
         })()`
     },
     {
@@ -32,6 +33,7 @@ var techtree = [
         effect: `(() => {
             upgrades[0].price *= 0.95;
             console.log("Cheese bought");
+            document.getElementById("burger").src = "images/cheese.png";
         })()`
     },
     {
@@ -46,6 +48,7 @@ var techtree = [
         effect: `(() => {
             upgrades[1].price *= 0.95;
             console.log("Lettuce bought");
+            document.getElementById("burger").src = "images/lettuce.png";
         })()`
     },
     {
@@ -60,6 +63,7 @@ var techtree = [
         effect: `(() => {
             upgrades[2].price *= 0.95;
             console.log("Tomato bought");
+            document.getElementById("burger").src = "images/tomato.png";
         })()`
     },
     {
